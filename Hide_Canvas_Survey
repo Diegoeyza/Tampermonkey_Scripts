@@ -1,0 +1,39 @@
+// ==UserScript==
+// @name         Hide Canvas Survey Modal
+// @namespace    http://tampermonkey.net/
+// @version      1.1
+// @description  Automatically removes Canvas survey modal popup
+// @match        *://*.instructure.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    console.log("Tampermonkey script running");
+
+    function removePopup() {
+        const overlay = document.getElementById('ek-overlay');
+        const modal = document.getElementById('ek-modal');
+        if (overlay) {
+            overlay.remove();
+            console.log("Overlay removed");
+        }
+        if (modal) {
+            modal.remove();
+            console.log("Modal removed");
+        }
+    }
+
+    // Try removing immediately
+    removePopup();
+
+    // Try again after 2 seconds
+    setTimeout(removePopup, 2000);
+
+    // Observe for new elements
+    const observer = new MutationObserver(() => {
+        removePopup();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
